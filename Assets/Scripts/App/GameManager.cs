@@ -109,6 +109,11 @@ public class GameManager : GenericSingleton<GameManager>
         return PlayerScore.SessionScore;
     }
 
+    public void ResetScore()
+    {
+        PlayerScore.SessionScore = 0;
+    }
+
     public void SetHighScore(int score)
     {
         PlayerScore.HighScore = score;
@@ -116,12 +121,12 @@ public class GameManager : GenericSingleton<GameManager>
         PlayerPrefs.Save();
     }
 
-    public void SetScore(int score)
+    public void AddScore()
     {
-        PlayerScore.SessionScore = score;
-        if (score > PlayerScore.HighScore)
+        PlayerScore.SessionScore +=1 ;
+        if (PlayerScore.SessionScore > PlayerScore.HighScore)
         {
-            SetHighScore(score);
+            SetHighScore(PlayerScore.SessionScore);
         }
     }
 

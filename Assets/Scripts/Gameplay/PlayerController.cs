@@ -10,7 +10,12 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private bool isGrounded = true;
 
-   
+    GameManager gameManager;
+
+    private void Start()
+    {
+        gameManager = GameManager.Instance;
+    }
 
     void Update()
     {
@@ -37,9 +42,18 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.CompareTag("Ground"))
+        if (other.gameObject.CompareTag(GameState.ObjectTags.Ground.ToString()))
         {
             isGrounded = true;
+        }
+        else if (other.gameObject.CompareTag(GameState.ObjectTags.Collectible.ToString()))
+        {
+            gameManager.AddScore();
+            other.gameObject.SetActive(false);
+        }
+        else if (other.gameObject.CompareTag(GameState.ObjectTags.Obstacle.ToString()))
+        {
+            gameManager.GameOver();
         }
     }
 

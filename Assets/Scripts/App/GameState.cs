@@ -8,6 +8,14 @@ public class GameState
         Gameplay,
         GameOver
     }
+
+    public enum ObjectTags
+    {
+        Player,
+        Ground,
+        Collectible,
+        Obstacle
+    }
     
     public enum UserAction
     {

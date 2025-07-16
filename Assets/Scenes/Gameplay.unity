@@ -155,6 +155,9 @@ MonoBehaviour:
   - tag: Ground
     prefab: {fileID: 6668632782637144731, guid: 521e36a06dc224d9d9955c9ad562523f, type: 3}
     size: 5
+  - tag: Collectible
+    prefab: {fileID: 8896761166128295675, guid: 220a6c6e6b33a4c91945efbf36445abd, type: 3}
+    size: 3
 --- !u!4 &217752190
 Transform:
   m_ObjectHideFlags: 0

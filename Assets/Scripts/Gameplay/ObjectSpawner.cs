@@ -22,12 +22,12 @@ public class ObjectSpawner : MonoBehaviour
 
         if (Random.value > 0.5f)
         {
-            Objectpooler.Instance.SpawnFromPool("Obstacle", spawnPos, Quaternion.identity);
+            Objectpooler.Instance.SpawnFromPool(GameState.ObjectTags.Obstacle.ToString(), spawnPos, Quaternion.identity);
         }
         else
         {
             spawnPos.y = 1f; // slightly higher for collectible
-            Objectpooler.Instance.SpawnFromPool("Collectible", spawnPos, Quaternion.identity);
+            Objectpooler.Instance.SpawnFromPool(GameState.ObjectTags.Collectible.ToString(), spawnPos, Quaternion.identity);
         }
     }
 }
