@@ -18,4 +18,14 @@ public class GameManager : GenericSingleton<GameManager>
     {
         
     }
+
+    public void GotoMainMenu()
+    {
+        
+    }
+
+    public void RestartGame()
+    {
+        
+    }
 }

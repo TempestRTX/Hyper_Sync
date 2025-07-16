@@ -24,12 +24,12 @@ public class EndScreenManager : ScreenManager
 
     public void RestartGame()
     {
-        
+        gameManager.RestartGame();
     }
 
     public void HomeGame()
     {
-        
+        gameManager.GotoMainMenu();
     }
     
 }
