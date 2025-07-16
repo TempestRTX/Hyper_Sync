@@ -25,10 +25,19 @@ public class GameManager : GenericSingleton<GameManager>
                 ManageUserActionfromMainMenu(action);
                 break;
             case GameState.AppState.Gameplay:
+                ManageUserActionfromGameplay(action);
                 break;
             case GameState.AppState.GameOver:
                 ManageUserActionfromGameOver(action);
                 break;
+        }
+    }
+
+    private void ManageUserActionfromGameplay(GameState.UserAction action)
+    {
+        if (action==GameState.UserAction.GameOver)
+        {
+            LoadScene(GameState.AppState.GameOver.ToString());
         }
     }
 
@@ -67,6 +76,7 @@ public class GameManager : GenericSingleton<GameManager>
         Application.Quit();
     }
 
+    [ContextMenu("Load Game Over")]
     public void GameOver()
     {
         ChangeGameState(GameState.AppState.Gameplay, GameState.UserAction.GameOver);
