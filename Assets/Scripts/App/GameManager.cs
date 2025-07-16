@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class GameManager : GenericSingleton<GameManager>
 {
-    
-    //Game Workflow
+    #region Game Workflow
+
     public void StartGame()
     {
         
@@ -28,4 +28,8 @@ public class GameManager : GenericSingleton<GameManager>
     {
         
     }
+
+    #endregion
+    
+    
 }
