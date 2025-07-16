@@ -9,6 +9,16 @@ public class GameState
         GameOver
     }
     
+    public enum UserAction
+    {
+        StartGame,
+        QuitGame,
+        RestartGame,
+        GoToMainMenu,
+        BackButton,
+        GameOver
+    }
+    
     //Score
     public class Score
     {
