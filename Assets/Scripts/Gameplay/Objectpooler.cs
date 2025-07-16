@@ -1,9 +1,15 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Objectpooler : GenericSingleton<Objectpooler>
+public class Objectpooler : MonoBehaviour
 {
-    
+    public static Objectpooler Instance;
+
+    private void Awake()
+    {
+       Instance = this;
+    }
 
     [System.Serializable]
     public class Pool
