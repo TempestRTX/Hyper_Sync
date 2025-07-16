@@ -39,6 +39,7 @@ public class Objectpooler : GenericSingleton<Objectpooler>
 
     public GameObject SpawnFromPool(string tag, Vector3 position, Quaternion rotation)
     {
+        
         if (!poolDictionary.ContainsKey(tag))
         {
             Debug.LogWarning("Pool with tag " + tag + " doesn't exist.");
