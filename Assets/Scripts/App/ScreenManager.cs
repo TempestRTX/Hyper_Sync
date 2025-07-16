@@ -14,7 +14,7 @@ public class ScreenManager : MonoBehaviour
 
     private void OnDisable()
     {
-        throw new NotImplementedException();
+        DeactivateScreen();
     }
 
     //Get Common script Instances
