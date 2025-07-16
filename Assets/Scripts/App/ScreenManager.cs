@@ -9,13 +9,23 @@ public class ScreenManager : MonoBehaviour
     public GameState.AppState AppState;
     private void OnEnable()
     {
-        Init();
+        InitScreen();
     }
-    
+
+    private void OnDisable()
+    {
+        throw new NotImplementedException();
+    }
+
     //Get Common script Instances
-    protected virtual void Init()
+    protected virtual void InitScreen()
     {
         gameManager=GameManager.Instance;
         eventManager=EventManager.Instance;
+    }
+
+    protected virtual void DeactivateScreen()
+    {
+        
     }
 }

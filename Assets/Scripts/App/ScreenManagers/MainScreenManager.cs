@@ -6,11 +6,18 @@ public class MainScreenManager : ScreenManager
     [SerializeField] private Button startGameButton;
     [SerializeField] private Button exitGameButton;
 
-    protected override void Init()
+    protected override void InitScreen()
     {
-        base.Init();
+        base.InitScreen();
         startGameButton.onClick.AddListener(StartGame);
         exitGameButton.onClick.AddListener(QuitGame);
+    }
+
+    protected override void DeactivateScreen()
+    {
+        base.DeactivateScreen();
+        startGameButton.onClick.RemoveAllListeners();
+        exitGameButton.onClick.RemoveAllListeners();
     }
 
     public void StartGame()
