@@ -8,4 +8,11 @@ public class GameState
         Gameplay,
         GameOver
     }
+    
+    //Score
+    public class Score
+    {
+        public int SessionScore;
+        public int HighScore;
+    }
 }
