@@ -13,6 +13,7 @@ public class EndScreenManager : ScreenManager
         base.InitScreen();
         RestartButton.onClick.AddListener(RestartGame);
         HomeButton.onClick.AddListener(HomeGame);
+        Scoretext.text = gameManager.GetScore().ToString();
     }
 
     protected override void DeactivateScreen()
