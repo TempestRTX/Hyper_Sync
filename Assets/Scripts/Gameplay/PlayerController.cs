@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     private int currentLane = 1; // 0 = Left, 1 = Center, 2 = Right
     private int totalLanes = 3;
     private Vector3 targetPosition;
+    private Vector3 lastPosition;
 
     [Header("Swipe Settings")]
     private Vector2 touchStart;
@@ -36,6 +37,12 @@ public class PlayerController : MonoBehaviour
     {
         // Auto-forward movement
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
+        
+        // Delta movement event
+        Vector3 delta = transform.position - lastPosition;
+        if (delta.sqrMagnitude > 0f)
+            EventManager.Instance.TriggerEvent(GameState.GameEvents.PlayerMoveDelta, delta);
+        lastPosition = transform.position;
 
         // Handle jump
 #if UNITY_EDITOR
@@ -46,6 +53,7 @@ public class PlayerController : MonoBehaviour
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isGrounded = false;
+            EventManager.Instance.TriggerEvent(GameState.GameEvents.PlayerJump);
         }
 
         // Swipe movement
@@ -121,9 +129,11 @@ public class PlayerController : MonoBehaviour
         {
             gameManager.AddScore();
             other.gameObject.SetActive(false);
+            EventManager.Instance.TriggerEvent(GameState.GameEvents.PlayerCollectedOrb, other.transform.position);
         }
         else if (tag == GameState.ObjectTags.Obstacle.ToString())
         {
+            EventManager.Instance.TriggerEvent(GameState.GameEvents.PlayerHitObstacle, other.transform.position);
             gameManager.GameOver();
         }
     }
