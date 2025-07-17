@@ -33,4 +33,14 @@ public class GameState
         public int SessionScore;
         public int HighScore;
     }
+    
+    //Networking
+    public static class GameEvents
+    {
+        public const string PlayerMoveDelta = "PlayerMoveDelta";
+        public const string PlayerJump = "PlayerJump";
+        public const string PlayerHitObstacle = "PlayerHitObstacle";
+        public const string PlayerCollectedOrb = "PlayerCollectedOrb";
+    }
+
 }
