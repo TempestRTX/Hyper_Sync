@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 838f2122219ed4f16b12ae68c678c752, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -377,10 +377,10 @@ Light:
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 2
+    m_Type: 1
     m_Resolution: -1
     m_CustomResolution: -1
-    m_Strength: 1
+    m_Strength: 0.503
     m_Bias: 0.05
     m_NormalBias: 0.4
     m_NearPlane: 0.2
@@ -525,7 +525,7 @@ GameObject:
   - component: {fileID: 1756056534}
   - component: {fileID: 1756056533}
   m_Layer: 0
-  m_Name: Ground
+  m_Name: Ground swpaner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -846,7 +846,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1144782715043668491, guid: 521e36a06dc224d9d9955c9ad562523f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 9.0893
       objectReference: {fileID: 0}
     - target: {fileID: 1144782715043668491, guid: 521e36a06dc224d9d9955c9ad562523f, type: 3}
       propertyPath: m_LocalRotation.w
