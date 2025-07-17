@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.iOS;
 using UnityEngine.SceneManagement;
 
 public class GameManager : GenericSingleton<GameManager>
@@ -7,6 +8,8 @@ public class GameManager : GenericSingleton<GameManager>
     private SceneManager _sceneManager;
     private void Start()
     {
+        //Game only in landscape
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
         InitGameManager();
     }
 
