@@ -24,6 +24,8 @@ public class Objectpooler : MonoBehaviour
 
     
 
+    [SerializeField] private Vector3 inactivePosition = new Vector3(0, -100f, 0f); // Offscreen safe spot
+
     void Start()
     {
         poolDictionary = new Dictionary<string, Queue<GameObject>>();
@@ -34,7 +36,7 @@ public class Objectpooler : MonoBehaviour
 
             for (int i = 0; i < pool.size; i++)
             {
-                GameObject obj = Instantiate(pool.prefab);
+                GameObject obj = Instantiate(pool.prefab, inactivePosition, Quaternion.identity);
                 obj.SetActive(false);
                 objectPool.Enqueue(obj);
             }

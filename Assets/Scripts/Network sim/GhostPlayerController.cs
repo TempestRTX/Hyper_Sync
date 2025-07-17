@@ -38,7 +38,7 @@ public class GhostPlayerController : MonoBehaviour
     {
         if (data is Vector3 delta)
         {
-            Vector3 mirroredDelta = new Vector3(delta.x, delta.y, delta.z);
+            Vector3 mirroredDelta = new Vector3(delta.x, 0, 0);
             deltaBuffer.Enqueue((Time.time + syncDelay, mirroredDelta));
         }
     }

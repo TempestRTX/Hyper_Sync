@@ -3,14 +3,23 @@ using UnityEngine;
 public class ObjectSpawner : MonoBehaviour
 {
     [SerializeField]  float spawnDistance = 20f;
+    [SerializeField] private float spawnDelay = 2f;
     [SerializeField] Transform player;
+    private float spawnTimer = 0f;
 
     void Update()
     {
+        // Wait before starting obstacle spawn
+        if (spawnTimer < spawnDelay)
+        {
+            spawnTimer += Time.deltaTime;
+            return;
+        }
+
         if (player.position.z + spawnDistance > lastSpawnZ)
         {
             SpawnObstacleOrCollectible();
-            lastSpawnZ += 10f; // next spawn point
+            lastSpawnZ += 10f; // Next spawn point
         }
     }
 
