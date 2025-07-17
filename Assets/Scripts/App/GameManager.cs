@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.iOS;
 using UnityEngine.SceneManagement;
 
 public class GameManager : GenericSingleton<GameManager>
