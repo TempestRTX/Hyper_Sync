@@ -24,7 +24,7 @@ public class Objectpooler : MonoBehaviour
 
     
 
-    [SerializeField] private Vector3 inactivePosition = new Vector3(0, -100f, 0f); // Offscreen safe spot
+    [SerializeField] private Vector3 inactivePosition = new Vector3(0, -1000f, 0f); // Offscreen safe spot
 
     void Start()
     {

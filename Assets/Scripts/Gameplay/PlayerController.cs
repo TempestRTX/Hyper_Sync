@@ -30,6 +30,10 @@ public class PlayerController : MonoBehaviour
 
     private GameManager gameManager;
     
+    [SerializeField] private GameObject MainCamera;
+    [SerializeField] private GameObject GhostCamera;
+    [SerializeField] private GameObject RippleCamera;
+    [SerializeField] private GameObject MainCanvas;
     
     //Fx
     [SerializeField] PostProcessVolume postProcessVolume;
@@ -37,6 +41,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] TextureParameter chromaticAberrationParameter;
     
     [SerializeField] CameraShake cameraShake;
+
+    private bool IsGameEventRunning;
 
     private void Start()
     {
@@ -49,36 +55,39 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        // Auto-forward movement
-        transform.Translate(Vector3.forward * speed * Time.deltaTime);
-        
-        // Delta movement event
-        Vector3 delta = transform.position - lastPosition;
-        if (delta.sqrMagnitude > 0f)
-            EventManager.Instance.TriggerEvent(GameState.GameEvents.PlayerMoveDelta, delta);
-        lastPosition = transform.position;
+        if (!IsGameEventRunning)
+        {
+            // Auto-forward movement
+            transform.Translate(Vector3.forward * speed * Time.deltaTime);
 
-        // Handle jump
+            // Delta movement event
+            Vector3 delta = transform.position - lastPosition;
+            if (delta.sqrMagnitude > 0f)
+                EventManager.Instance.TriggerEvent(GameState.GameEvents.PlayerMoveDelta, delta);
+            lastPosition = transform.position;
+
+            // Handle jump
 #if UNITY_EDITOR
-        if (Input.GetMouseButtonDown(0) && isGrounded)
+            if (Input.GetMouseButtonDown(0) && isGrounded)
 #elif UNITY_ANDROID || UNITY_IOS
         if (Input.touchCount > 0 && isGrounded)
 #endif
-        {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            isGrounded = false;
-            EventManager.Instance.TriggerEvent(GameState.GameEvents.PlayerJump);
+            {
+                rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+                isGrounded = false;
+                EventManager.Instance.TriggerEvent(GameState.GameEvents.PlayerJump);
+            }
+
+            // Swipe movement
+            HandleSwipe();
+
+            // Smooth horizontal lane movement
+            Vector3 newPosition = new Vector3(targetPosition.x, transform.position.y, transform.position.z);
+            transform.position = Vector3.Lerp(transform.position, newPosition, laneChangeSpeed * Time.deltaTime);
+
+            // Gradually increase speed
+            speed += speedIncreaseRate * Time.deltaTime;
         }
-
-        // Swipe movement
-        HandleSwipe();
-
-        // Smooth horizontal lane movement
-        Vector3 newPosition = new Vector3(targetPosition.x, transform.position.y, transform.position.z);
-        transform.position = Vector3.Lerp(transform.position, newPosition, laneChangeSpeed * Time.deltaTime);
-
-        // Gradually increase speed
-        speed += speedIncreaseRate * Time.deltaTime;
     }
 
     private void HandleSwipe()
@@ -148,7 +157,8 @@ public class PlayerController : MonoBehaviour
         else if (tag == GameState.ObjectTags.Obstacle.ToString())
         {
             EventManager.Instance.TriggerEvent(GameState.GameEvents.PlayerHitObstacle, other.transform.position);
-            gameManager.GameOver();
+            IsGameEventRunning = true;
+            StartCoroutine(ChangeIntensity(2f));
         }
     }
     
@@ -167,13 +177,24 @@ public class PlayerController : MonoBehaviour
 
      private IEnumerator ChangeIntensity(float intensity)
     {
-        cameraShake.TriggerShake(2,2);
+       
         while (chromaticAberration.intensity.value<intensity)
         {
             yield return new WaitForEndOfFrame();
             var intess = chromaticAberration.intensity.value + 0.1f;
             chromaticAberration.intensity.value = intess;
+            
         }
+        yield return new WaitForSeconds(2f);
+        cameraShake.TriggerShake(1,1);
+        yield return new WaitForSeconds(1.3f);
+        //Disable player cams and show ripple fx
+        MainCamera.SetActive(false);
+        RippleCamera.SetActive(true);
+        GhostCamera.SetActive(false);
+        MainCanvas.SetActive(false);
+        yield return new WaitForSeconds(1.3f);
+        gameManager.GameOver();
     }
     
 }

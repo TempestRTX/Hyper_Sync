@@ -6,6 +6,12 @@ public class ObjectSpawner : MonoBehaviour
     [SerializeField] private float spawnDelay = 2f;
     [SerializeField] Transform player;
     private float spawnTimer = 0f;
+    
+    
+
+    void Start() {
+        lastSpawnZ = player.position.z + spawnDistance;
+    }
 
     void Update()
     {
@@ -16,10 +22,11 @@ public class ObjectSpawner : MonoBehaviour
             return;
         }
 
+        // Spawn when player is close to the next spawn point
         if (player.position.z + spawnDistance > lastSpawnZ)
         {
             SpawnObstacleOrCollectible();
-            lastSpawnZ += 10f; // Next spawn point
+            lastSpawnZ += 10f;
         }
     }
 
