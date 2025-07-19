@@ -187,7 +187,7 @@ public class PlayerController : MonoBehaviour
         {
             OnActionEvent?.Invoke(new GameState.PlayerActionEvent
             {
-                timestamp = Time.time,
+                timestamp = Time.time+2f,
                 type = GameState.PlayerActionType.HitObstacle,
                 position = transform.position
             });
