@@ -1,5 +1,8 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 
 public class PlayerController : MonoBehaviour
 {
@@ -26,12 +29,23 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool isGrounded = true;
 
     private GameManager gameManager;
+    
+    
+    //Fx
+    [SerializeField] PostProcessVolume postProcessVolume;
+    private ChromaticAberration chromaticAberration;
+    [SerializeField] TextureParameter chromaticAberrationParameter;
+    
+    [SerializeField] CameraShake cameraShake;
 
     private void Start()
     {
         gameManager = GameManager.Instance;
         targetPosition = transform.position;
+        postProcessVolume.profile.TryGetSettings(out chromaticAberration);
     }
+
+  
 
     void Update()
     {
@@ -128,7 +142,7 @@ public class PlayerController : MonoBehaviour
         else if (tag == GameState.ObjectTags.Collectible.ToString())
         {
             gameManager.AddScore();
-            other.gameObject.SetActive(false);
+            //other.gameObject.SetActive(false);
             EventManager.Instance.TriggerEvent(GameState.GameEvents.PlayerCollectedOrb, other.transform.position);
         }
         else if (tag == GameState.ObjectTags.Obstacle.ToString())
@@ -137,4 +151,29 @@ public class PlayerController : MonoBehaviour
             gameManager.GameOver();
         }
     }
+    
+    private void ChromaticAberrationONOFF(bool isOn)
+    {
+        if (isOn)
+        {
+            chromaticAberration.active = true;
+            
+        }
+        else
+        {
+            chromaticAberration.active = false;
+        }
+    }
+
+     private IEnumerator ChangeIntensity(float intensity)
+    {
+        cameraShake.TriggerShake(2,2);
+        while (chromaticAberration.intensity.value<intensity)
+        {
+            yield return new WaitForEndOfFrame();
+            var intess = chromaticAberration.intensity.value + 0.1f;
+            chromaticAberration.intensity.value = intess;
+        }
+    }
+    
 }
