@@ -27,6 +27,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("State")]
     [SerializeField] private bool isGrounded = true;
+    
+    public Action<GameState.PlayerActionEvent> OnActionEvent;
 
     private GameManager gameManager;
     
@@ -75,6 +77,12 @@ public class PlayerController : MonoBehaviour
             {
                 rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
                 isGrounded = false;
+                OnActionEvent?.Invoke(new GameState.PlayerActionEvent
+                {
+                    timestamp = Time.time,
+                    type = GameState.PlayerActionType.Jump,
+                    position = transform.position
+                });
                 EventManager.Instance.TriggerEvent(GameState.GameEvents.PlayerJump);
             }
 
@@ -134,11 +142,26 @@ public class PlayerController : MonoBehaviour
 
     private void ChangeLane(int direction)
     {
-        currentLane += direction;
-        currentLane = Mathf.Clamp(currentLane, 0, totalLanes - 1);
-        float xPos = (currentLane - 1) * laneDistance;
-        targetPosition = new Vector3(xPos, transform.position.y, transform.position.z);
+        int prevLane = currentLane;
+        currentLane = Mathf.Clamp(currentLane + direction, 0, totalLanes - 1);
+
+        if (prevLane != currentLane)
+        {
+            float xPos = (currentLane - 1) * laneDistance;
+            targetPosition = new Vector3(xPos, transform.position.y, transform.position.z);
+
+            // Sync lane change event
+            OnActionEvent?.Invoke(new GameState.PlayerActionEvent
+            {
+                timestamp = Time.time,
+                type = GameState.PlayerActionType.LaneChange,
+                position = targetPosition, // The actual new x-position
+                param = currentLane        // Send the new lane index!
+            });
+            //EventManager.Instance.TriggerEvent(GameState.GameEvents.PlayerLaneChange, currentLane);
+        }
     }
+
 
     private void OnCollisionEnter(Collision other)
     {
@@ -150,12 +173,24 @@ public class PlayerController : MonoBehaviour
         }
         else if (tag == GameState.ObjectTags.Collectible.ToString())
         {
+            OnActionEvent?.Invoke(new GameState.PlayerActionEvent
+            {
+                timestamp = Time.time,
+                type = GameState.PlayerActionType.CollectOrb,
+                position = transform.position
+            });
             gameManager.AddScore();
             //other.gameObject.SetActive(false);
             EventManager.Instance.TriggerEvent(GameState.GameEvents.PlayerCollectedOrb, other.transform.position);
         }
         else if (tag == GameState.ObjectTags.Obstacle.ToString())
         {
+            OnActionEvent?.Invoke(new GameState.PlayerActionEvent
+            {
+                timestamp = Time.time,
+                type = GameState.PlayerActionType.HitObstacle,
+                position = transform.position
+            });
             EventManager.Instance.TriggerEvent(GameState.GameEvents.PlayerHitObstacle, other.transform.position);
             IsGameEventRunning = true;
             StartCoroutine(ChangeIntensity(2f));

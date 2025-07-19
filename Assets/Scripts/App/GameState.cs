@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameState 
@@ -41,6 +42,37 @@ public class GameState
         public const string PlayerJump = "PlayerJump";
         public const string PlayerHitObstacle = "PlayerHitObstacle";
         public const string PlayerCollectedOrb = "PlayerCollectedOrb";
+    }
+    
+    
+    public enum PlayerActionType { Jump, CollectOrb, LaneChange,HitObstacle }
+    public struct PlayerActionEvent
+    {
+        public float timestamp;
+        public PlayerActionType type;
+        public Vector3 position;
+        public int param;
+    }
+    
+    public class EventQueue
+    {
+        private Queue<PlayerActionEvent> actions = new Queue<PlayerActionEvent>();
+        private float networkDelay = 0.1f;
+
+        public void Enqueue(PlayerActionEvent action)
+        {
+            actions.Enqueue(action);
+        }
+
+        public PlayerActionEvent? DequeueIfReady(float currentTime)
+        {
+            if (actions.Count == 0) return null;
+            if (currentTime - actions.Peek().timestamp >= networkDelay)
+                return actions.Dequeue();
+            return null;
+        }
+
+        public void Clear() => actions.Clear();
     }
 
 }
