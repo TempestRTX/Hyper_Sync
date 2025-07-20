@@ -7,7 +7,8 @@ public class GhostController : MonoBehaviour
     [Header("Movement Settings")]
     [SerializeField] private float speed = 5f;
     [SerializeField] private float jumpForce = 7f;
-
+    [SerializeField] private float speedIncreaseRate = 0.2f;
+    
     [Header("Lane Settings")]
     [SerializeField] private float laneDistance = 2f;   
     [SerializeField] private float laneChangeSpeed = 10f;
@@ -43,7 +44,8 @@ public class GhostController : MonoBehaviour
         {
             ProcessEvent(evt.Value);
         }
-
+        // Gradually increase speed
+        speed += speedIncreaseRate * Time.deltaTime;
         
         Vector3 laneTarget = new Vector3(targetPosition.x, transform.position.y, transform.position.z);
         transform.position = Vector3.Lerp(transform.position, laneTarget, laneChangeSpeed * Time.deltaTime);

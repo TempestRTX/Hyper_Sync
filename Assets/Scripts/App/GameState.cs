@@ -93,13 +93,13 @@ public class GameState
             actions.Enqueue(action);
         }
 
-        public SpawnObjectEvent? DequeueIfReady(float currentTime)
+        public SpawnObjectEvent DequeueIfReady()
         {
-            if (actions.Count == 0) return null;
-            if (currentTime - actions.Peek().timestamp >= networkDelay)
-                return actions.Dequeue();
-            return null;
+            if (actions.Count == 0)
+                return new SpawnObjectEvent();
+            return actions.Dequeue();
         }
+
 
         public void Clear() => actions.Clear();
     }

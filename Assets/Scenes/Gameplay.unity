@@ -1359,6 +1359,7 @@ MonoBehaviour:
   cameraShake: {fileID: 448981848}
   speed: 5
   jumpForce: 7
+  speedIncreaseRate: 0.2
   laneDistance: 2
   laneChangeSpeed: 10
   isAlive: 1
@@ -1655,7 +1656,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5054a8b2900644f483a9a134b8f66cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnDelay: 2
+  batchSize: 3
   player: {fileID: 1027793701}
 --- !u!1 &1690822110
 GameObject:
@@ -1831,14 +1832,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pools:
   - tag: ObstacleGhost
-    prefab: {fileID: 74962603211459511, guid: fcf88b416d757453886455eb1d28d301, type: 3}
-    size: 10
+    prefab: {fileID: 1586893322395511235, guid: d3644f2294dc24fb69e22b5f100d1a7e, type: 3}
+    size: 20
   - tag: GroundGhost
     prefab: {fileID: 4806502166178232435, guid: 3592771ff985c4535a4bfa29701599f9, type: 3}
     size: 5
   - tag: CollectibleGhost
     prefab: {fileID: 7512849569964518104, guid: d39770a440c6d48ef96094c3a530456f, type: 3}
-    size: 3
+    size: 10
   inactivePosition: {x: 0, y: -1000, z: 0}
 --- !u!1 &1897332557
 GameObject:

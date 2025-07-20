@@ -14,8 +14,17 @@ public class GameplayScreenManager : ScreenManager
       {
           player.OnActionEvent += action => eventQueue.Enqueue(action);
           ghost.eventQueue = eventQueue;
-          spawner.OnActionEvent += action => spawnEvent.Enqueue(action);
-          ghostObjectSpawner.eventQueue=spawnEvent;
+          spawner.OnActionEvent += HandleSpawnAction;
+          ghostObjectSpawner.eventQueue = spawnEvent;
+         
       }
+      
+      void HandleSpawnAction(GameState.SpawnObjectEvent action)
+      {
+          spawnEvent.Enqueue(action); 
+         
+      }
+
+      
     
 }

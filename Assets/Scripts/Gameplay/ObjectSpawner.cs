@@ -46,7 +46,7 @@ public class ObjectSpawner : MonoBehaviour
             {
                 timestamp = Time.time,
                 type = GameState.SpawnObjectType.Obstacle,
-                position = transform.position
+                position = spawnPos
             });
         }
         else
@@ -56,8 +56,8 @@ public class ObjectSpawner : MonoBehaviour
             OnActionEvent?.Invoke(new GameState.SpawnObjectEvent()
             {
                 timestamp = Time.time,
-                type = GameState.SpawnObjectType.Obstacle,
-                position = transform.position
+                type = GameState.SpawnObjectType.Collectable,
+                position = spawnPos
             });
         }
     }

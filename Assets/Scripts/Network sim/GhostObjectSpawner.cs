@@ -1,50 +1,56 @@
 using UnityEngine;
+using System.Collections;
 
 public class GhostObjectSpawner : MonoBehaviour
 {
-    [SerializeField] private float spawnDelay = 2f;
-    [SerializeField] public GameState.ObjectEventQueue eventQueue= new GameState.ObjectEventQueue();
-    [SerializeField] private Transform player; // Reference to the player
+    [SerializeField] private int batchSize = 10;
+    public GameState.ObjectEventQueue eventQueue;
+    [SerializeField] private Transform player;
 
-    private float spawnTimer = 0f;
+    private void OnEnable() {
+        StartCoroutine(ProcessEventsCoroutine());
+    }
 
-    void Update()
+    private IEnumerator ProcessEventsCoroutine()
     {
-        if (spawnTimer < spawnDelay)
+        while (true)
         {
-            spawnTimer += Time.deltaTime;
-            return;
-        }
-
-        var spawnEvent = eventQueue.DequeueIfReady(Time.time);
-        if (spawnEvent.HasValue)
-        {
-            ProcessGhostSpawnEvent(spawnEvent.Value);
+            int processed = 0;
+            while (processed < batchSize && eventQueue != null)
+            {
+                var spawnEvent = eventQueue.DequeueIfReady();
+                if (spawnEvent.timestamp==0f) break;
+                ProcessGhostSpawnEvent(spawnEvent);
+                processed++;
+            }
+            yield return null;  // Defer remaining events to next frame
         }
     }
 
-    void ProcessGhostSpawnEvent(GameState.SpawnObjectEvent spawnEvent)
+    private void ProcessGhostSpawnEvent(GameState.SpawnObjectEvent spawnEvent)
     {
         if (player == null)
         {
-            Debug.LogError("Player Transform not set on GhostObjectSpawner!");
+            Debug.LogError("GhostObjectSpawner: Player Transform not set!");
             return;
         }
 
-        
         Vector3 spawnWorldPos = new Vector3(
             player.position.x + spawnEvent.position.x,
             player.position.y + spawnEvent.position.y,
-            spawnEvent.position.z 
+            spawnEvent.position.z
         );
 
         switch (spawnEvent.type)
         {
             case GameState.SpawnObjectType.Obstacle:
-                GhostObjectPooler.Instance.SpawnFromPool(GameState.ObjectTags.Obstacle.ToString(), spawnWorldPos, Quaternion.identity);
+                GhostObjectPooler.Instance.SpawnFromPool(GameState.ObjectTags.Obstacle.ToString()+"Ghost", spawnWorldPos, Quaternion.identity);
                 break;
             case GameState.SpawnObjectType.Collectable:
-                GhostObjectPooler.Instance.SpawnFromPool(GameState.ObjectTags.Collectible.ToString(), spawnWorldPos, Quaternion.identity);
+                GhostObjectPooler.Instance.SpawnFromPool("CollectibleGhost", spawnWorldPos, Quaternion.identity);
+                break;
+            default:
+                Debug.LogWarning("GhostObjectSpawner: Unknown SpawnObjectType: " + spawnEvent.type);
                 break;
         }
     }
