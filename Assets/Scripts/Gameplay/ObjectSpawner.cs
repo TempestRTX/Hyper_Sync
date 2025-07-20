@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class ObjectSpawner : MonoBehaviour
 {
@@ -7,6 +9,7 @@ public class ObjectSpawner : MonoBehaviour
     [SerializeField] Transform player;
     private float spawnTimer = 0f;
     
+    public Action<GameState.SpawnObjectEvent> OnActionEvent;
     
 
     void Start() {
@@ -39,11 +42,23 @@ public class ObjectSpawner : MonoBehaviour
         if (Random.value > 0.5f)
         {
             Objectpooler.Instance.SpawnFromPool(GameState.ObjectTags.Obstacle.ToString(), spawnPos, Quaternion.identity);
+            OnActionEvent?.Invoke(new GameState.SpawnObjectEvent()
+            {
+                timestamp = Time.time,
+                type = GameState.SpawnObjectType.Obstacle,
+                position = transform.position
+            });
         }
         else
         {
             spawnPos.y = 1f; // slightly higher for collectible
             Objectpooler.Instance.SpawnFromPool(GameState.ObjectTags.Collectible.ToString(), spawnPos, Quaternion.identity);
+            OnActionEvent?.Invoke(new GameState.SpawnObjectEvent()
+            {
+                timestamp = Time.time,
+                type = GameState.SpawnObjectType.Obstacle,
+                position = transform.position
+            });
         }
     }
 }

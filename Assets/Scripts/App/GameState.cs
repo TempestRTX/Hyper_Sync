@@ -74,5 +74,33 @@ public class GameState
 
         public void Clear() => actions.Clear();
     }
+    
+    public enum SpawnObjectType { Collectable, Obstacle }
 
+    public struct SpawnObjectEvent
+    {
+        public Vector3 position;
+        public SpawnObjectType type;
+        public float timestamp;
+    }
+    public class ObjectEventQueue
+    {
+        private Queue<SpawnObjectEvent> actions = new Queue<SpawnObjectEvent>();
+        private float networkDelay = 0.1f;
+
+        public void Enqueue(SpawnObjectEvent action)
+        {
+            actions.Enqueue(action);
+        }
+
+        public SpawnObjectEvent? DequeueIfReady(float currentTime)
+        {
+            if (actions.Count == 0) return null;
+            if (currentTime - actions.Peek().timestamp >= networkDelay)
+                return actions.Dequeue();
+            return null;
+        }
+
+        public void Clear() => actions.Clear();
+    }
 }

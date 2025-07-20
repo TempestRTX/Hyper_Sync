@@ -7,6 +7,9 @@ TagManager:
   - Ground
   - Obstacle
   - Collectible
+  - ObstacleGhost
+  - CollectibleGhost
+  - GroundGhost
   layers:
   - Default
   - TransparentFX

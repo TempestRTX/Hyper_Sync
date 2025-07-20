@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Objectpooler : MonoBehaviour
+public class GhostObjectPooler : MonoBehaviour
 {
-    public static Objectpooler Instance;
-
+    public static GhostObjectPooler Instance;
+  
     private void Awake()
     {
-       Instance = this;
+        Instance = this;
     }
 
     [System.Serializable]
@@ -20,7 +20,7 @@ public class Objectpooler : MonoBehaviour
     }
 
     public List<Pool> pools;
-   [SerializeField] private Dictionary<string, Queue<GameObject>> poolDictionary;
+    [SerializeField]  private Dictionary<string, Queue<GameObject>> poolDictionary;
 
     
 
